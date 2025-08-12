@@ -1,0 +1,3 @@
+# Default configuration for broken link checker
+default_sitemap_url: 'https://cosecharoja.ec/sitemap.xml'
+default_output_path: 'broken_links_report.csv'
