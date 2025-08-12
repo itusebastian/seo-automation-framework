@@ -1,0 +1,12 @@
+name: Broken Link Checker
+on: [push]
+jobs:
+  check-broken-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Run Broken Link Checker
+        uses: itusebastian/seo-broken-link-checker-action@main
+        env:
+          SITEMAP_URL: ${{ secrets.SITEMAP_URL }}
