@@ -1,0 +1,37 @@
+name: Keyword Ranking Tracker
+on:
+  schedule:
+    - cron: "0 4 * * 1" # Every Monday at 4 AM UTC
+  workflow_dispatch:
+jobs:
+  track-keyword-rankings:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install -r automations/keyword_ranking_tracker/requirements.txt
+      - name: Run Keyword Ranking Tracker
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          TARGET_DOMAIN: ${{ secrets.TARGET_DOMAIN }}
+          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+        run: |
+          python automations/keyword_ranking_tracker/keyword_ranking_tracker.py \
+            --keywords automations/keyword_ranking_tracker/keywords.txt \
+            --config automations/keyword_ranking_tracker/config.yaml \
+            --output results/keyword_rankings_${{ github.run_id }}.csv
+      - name: Commit results
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add results/keyword_rankings_*.csv
+          git commit -m "Add keyword ranking results [skip ci]" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
