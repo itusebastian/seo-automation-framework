@@ -1,0 +1,5 @@
+requests
+pyyaml
+pandas
+gspread # optional for Google Sheets integration
+oauth2client # required for gspread
