@@ -1,7 +1,5 @@
 name: Broken Link Checker
 on:
-  schedule:
-    - cron: "0 4 */30 * *" # Every 30 days at 4 AM UTC
   workflow_dispatch:
 jobs:
   check-broken-links:
